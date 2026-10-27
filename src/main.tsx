@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { router } from "./router";
 import LoadingSpinner from "./shared-component/loading/LoadingSpinner";
+import { ToastProvider } from "@/components/kit";
 
 const Confirmation = React.lazy(() =>
   import("@/shared-component/Confirmation").then((m) => ({ default: m.default })),
@@ -23,11 +24,13 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ToastContainer limit={1} />
-      <Suspense fallback={<LoadingSpinner />}>
-        <Confirmation />
-      </Suspense>
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <ToastContainer limit={1} />
+        <Suspense fallback={<LoadingSpinner />}>
+          <Confirmation />
+        </Suspense>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </QueryClientProvider>
   </StrictMode>,
 );

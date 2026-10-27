@@ -1,21 +1,26 @@
-import HeaderSection from "../components/HeaderSection";
-import AttentionRequired from "../components/AttentionRequired";
-import LeadFunnel from "../components/LeadFunnel";
+import { useMemo, useState } from "react";
+import { DashboardScreen } from "@/modules/shared-modules/admin/screens";
+import { useAdminNav } from "@/modules/shared-modules/admin/useAdminNav";
+import PageFrame from "@/modules/shared-modules/admin/PageFrame";
+import { LEADS, BOOKINGS, AGENTS } from "@/data";
 
 const Dashboard = () => {
-  return (
-    <div className="min-h-full bg-[#F8F9FA] p-4 sm:p-6">
-      <HeaderSection />
+  const { go } = useAdminNav();
+  const [leads] = useState(LEADS);
+  const [agents] = useState(AGENTS);
+  const bookings = useMemo(
+    () =>
+      BOOKINGS.map((b, i) => ({
+        ...b,
+        status: i === 1 ? "Approved" : i === 3 ? "Rejected" : "Pending",
+      })),
+    [],
+  );
 
-      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <div className="lg:col-span-3">
-          <AttentionRequired />
-        </div>
-        <div className="lg:col-span-2">
-          <LeadFunnel />
-        </div>
-      </div>
-    </div>
+  return (
+    <PageFrame>
+      <DashboardScreen go={go} leads={leads} bookings={bookings} agents={agents} />
+    </PageFrame>
   );
 };
 

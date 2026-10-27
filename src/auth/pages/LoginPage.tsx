@@ -1,14 +1,35 @@
-import { useTokenStore } from "@/store/store";
+import { useNavigate } from "react-router";
+import { useTokenStore, useUserDetailStore } from "@/store/store";
+import { Login } from "./LoginDesign";
 
 const LoginPage = () => {
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate();
   const setToken = useTokenStore((state) => state.setToken);
-  setToken('token');
+  const setUserDetail = useUserDetailStore((state) => state.setUserDetail);
 
   return (
-    <>
-    Login
-    </>
+    <Login
+      initialRole="admin"
+      onLogin={(role) => {
+        setToken("prototype-token");
+        setUserDetail({
+          name:
+            role === "admin"
+              ? "Amina Durrani"
+              : role === "management"
+                ? "Mohit"
+                : "Archit Batham",
+          role:
+            role === "admin"
+              ? "Administrator"
+              : role === "management"
+                ? "Manager"
+                : "Agent",
+          workspace: role,
+        });
+        navigate("/dashboard");
+      }}
+    />
   );
 };
 
